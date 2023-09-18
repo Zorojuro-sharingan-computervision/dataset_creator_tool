@@ -130,7 +130,7 @@ while where is False:
       where=True
   elif cnn_yolo.lower()=="yolo":
       def support_video_to_frame(
-          folder_path, object_name, object_vid_path, start_image_number=0
+          folder_path, object_name, object_vid_path,number_of_images, start_image_number=0
       ):
           if not folder_path.exists():
               os.mkdir(folder_path)
@@ -145,7 +145,7 @@ while where is False:
           cap = cv2.VideoCapture(object_vid_path)
           no_of_images = start_image_number
 
-          while True:
+          while number_of_images!=no_of_images:
               ret, frame = cap.read()
               if ret:
                   file_name = os.path.join(
@@ -178,6 +178,7 @@ while where is False:
         no_of_videos=int(input(f"Enter no. of Videos for {object_name} \n"))
         no_of_vid=int(no_of_videos)
         vid_paths=[]
+        number_of_images=int(input("How many images do you want?"))
         i=1
         while no_of_vid!=0:
           object_vid_path = input(f"Enter {i} video Path for {object_name}: \n")
@@ -187,8 +188,8 @@ while where is False:
         i=0
         while no_of_videos!=0:
           object_vid_path=vid_paths[i]
-          no_of_images = support_video_to_frame(folder_path, object_name, object_vid_path)
-          print(f"Total images saved: {no_of_images}")
+          no_of_images = support_video_to_frame(folder_path, object_name, object_vid_path,number_of_images)
+          print(f"Total images saved: {number_of_images}")
           no_of_videos-=1
           i+=1
       where=True
