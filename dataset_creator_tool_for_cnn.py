@@ -152,7 +152,7 @@ while where is False:
                       folder_path, f"{object_name}_{no_of_images:09d}.jpg"
                   )
                   cv2.imwrite(str(file_name), frame)
-                  print(f"Saved {file_name} \n")
+                  print(f"Saved {file_name}")
                   no_of_images += 1
               else:
                   return no_of_images
