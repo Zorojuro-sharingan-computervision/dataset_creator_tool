@@ -184,7 +184,7 @@ while where is False:
           vid_paths.append(object_vid_path)
           no_of_vid-=1
           i+=1
-          i=0
+        i=0
         while no_of_videos!=0:
           object_vid_path=vid_paths[i]
           no_of_images = support_video_to_frame(folder_path, object_name, object_vid_path)
