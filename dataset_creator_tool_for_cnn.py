@@ -113,88 +113,98 @@ def data_maker(folder_path, train_dir, test_dir):
     for object_name, total in object_image_totals.items():
         print(f"Total Images of {object_name} : {total}")
 
-where=False
+
+where = False
 while where is False:
-  cnn_yolo=input("Dataset of CNN or YOLO ? \n")
-  if cnn_yolo.lower()=="cnn":
-      folder_name = input("Enter Folder Name : \n")
-      folder_dir = os.mkdir(f"{folder_name}")
-      print("Folder Created")
-      folder_path = Path(folder_name)
-      train_dir = folder_path / "train"
-      test_dir = folder_path / "test"
-      print("train & test dir created")
-      train_dir.mkdir()
-      test_dir.mkdir()
-      data_maker(folder_path, train_dir, test_dir)
-      where=True
-  elif cnn_yolo.lower()=="yolo":
-      def support_video_to_frame(
-          folder_path, object_name, object_vid_path,number_of_images, start_image_number=0
-      ):
-          if not folder_path.exists():
-              os.mkdir(folder_path)
-              print("Folder Created \n")
-          else:
-              print("Folder Exists,adding to the folder \n")
-              existing_images = [f.name for f in folder_path.glob(f"{object_name}_*.jpg")]
-              if existing_images:
-                  last_image_number = max(int(fname.split('_')[1].split('.')[0]) for fname in existing_images)
-                  start_image_number = last_image_number + 1
+    cnn_yolo = input("Dataset of CNN or YOLO ? \n")
+    if cnn_yolo.lower() == "cnn":
+        folder_name = input("Enter Folder Name : \n")
+        folder_dir = os.mkdir(f"{folder_name}")
+        print("Folder Created")
+        folder_path = Path(folder_name)
+        train_dir = folder_path / "train"
+        test_dir = folder_path / "test"
+        print("train & test dir created")
+        train_dir.mkdir()
+        test_dir.mkdir()
+        data_maker(folder_path, train_dir, test_dir)
+        where = True
+    elif cnn_yolo.lower() == "yolo":
 
-          cap = cv2.VideoCapture(object_vid_path)
-          no_of_images = start_image_number
+        def support_video_to_frame(
+            folder_path,
+            object_name,
+            object_vid_path,
+            number_of_images,
+            start_image_number=0,
+        ):
+            if not folder_path.exists():
+                os.mkdir(folder_path)
+                print("Folder Created \n")
+            else:
+                print("Folder Exists,adding to the folder \n")
+                existing_images = [
+                    f.name for f in folder_path.glob(f"{object_name}_*.jpg")
+                ]
+                if existing_images:
+                    last_image_number = max(
+                        int(fname.split("_")[1].split(".")[0])
+                        for fname in existing_images
+                    )
+                    start_image_number = last_image_number + 1
 
-          while number_of_images!=no_of_images:
-              ret, frame = cap.read()
-              if ret:
-                  file_name = os.path.join(
-                      folder_path, f"{object_name}_{no_of_images:09d}.jpg"
-                  )
-                  cv2.imwrite(str(file_name), frame)
-                  print(f"Saved {file_name}")
-                  no_of_images += 1
-              else:
-                  return no_of_images
+            cap = cv2.VideoCapture(object_vid_path)
+            no_of_images = start_image_number
 
-      folder_name = "Images"
-      where=False
-      while where is False:
-        where_to_save=input("Do you want to save the Images in drive? Y/n \n")
-        if where_to_save.lower()=="y":
-            folder_path=Path("/content/drive/MyDrive/Images")
-            where=True
-        elif where_to_save.lower()=="n":
-            folder_path=Path("Images")
-            where=True
-        else:
-            print("Enter Y/n, Do you want to save the Images in drive? \n")
-            
+            while number_of_images != no_of_images:
+                ret, frame = cap.read()
+                if ret:
+                    file_name = os.path.join(
+                        folder_path, f"{object_name}_{no_of_images:09d}.jpg"
+                    )
+                    cv2.imwrite(str(file_name), frame)
+                    print(f"Saved {file_name}")
+                    no_of_images += 1
+                else:
+                    return no_of_images
 
+        folder_name = "Images"
+        where = False
+        while where is False:
+            where_to_save = input("Do you want to save the Images in drive? Y/n \n")
+            if where_to_save.lower() == "y":
+                folder_path = Path("/content/drive/MyDrive/Images")
+                where = True
+            elif where_to_save.lower() == "n":
+                folder_path = Path("Images")
+                where = True
+            else:
+                print("Enter Y/n, Do you want to save the Images in drive? \n")
 
-        object_name = input("Enter object name: ")
+            object_name = input("Enter object name: \n")
 
-
-        no_of_videos=int(input(f"Enter no. of Videos for {object_name} \n"))
-        no_of_vid=int(no_of_videos)
-        vid_paths=[]
-        number_of_images=int(input("How many images do you want?"))
-        i=1
-        while no_of_vid!=0:
-          object_vid_path = input(f"Enter {i} video Path for {object_name}: \n")
-          vid_paths.append(object_vid_path)
-          no_of_vid-=1
-          i+=1
-        i=0
-        while no_of_videos!=0:
-          object_vid_path=vid_paths[i]
-          no_of_images = support_video_to_frame(folder_path, object_name, object_vid_path,number_of_images)
-          print(f"Total images saved: {number_of_images}")
-          no_of_videos-=1
-          i+=1
-      where=True
-  else:
-    print("Enter either yolo or cnn... \n")
+            no_of_videos = int(input(f"Enter no. of Videos for {object_name} \n"))
+            no_of_vid = int(no_of_videos)
+            vid_paths = []
+            number_of_images = int(input("How many images do you want? \n"))
+            i = 1
+            while no_of_vid != 0:
+                object_vid_path = input(f"Enter {i} video Path for {object_name}: \n")
+                vid_paths.append(object_vid_path)
+                no_of_vid -= 1
+                i += 1
+            i = 0
+            while no_of_videos != 0:
+                object_vid_path = vid_paths[i]
+                no_of_images = support_video_to_frame(
+                    folder_path, object_name, object_vid_path, number_of_images
+                )
+                print(f"Total images saved: {number_of_images}")
+                no_of_videos -= 1
+                i += 1
+        where = True
+    else:
+        print("Enter either yolo or cnn... \n")
 # Proggrammed by Samyak A. Nahar
 
 # Libraries used:
